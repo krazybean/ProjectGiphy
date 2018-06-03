@@ -1,0 +1,2 @@
+export FLASK_ENV=projectgiphy
+export FLASK_APP=projectgiphy
