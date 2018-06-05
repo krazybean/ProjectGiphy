@@ -6,6 +6,7 @@ app = Flask(__name__)
 app.debug = configs.DEBUG
 app.secret_key = configs.SECRET_KEY
 app.database = configs.DATABASE_URI
+app.url_map.strict_slashes = False
 
 # Initialize views
 import projectgiphy.views

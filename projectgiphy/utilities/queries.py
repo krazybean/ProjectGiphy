@@ -44,10 +44,15 @@ class sqlite:
         );
         """
 
+    select_roles = """ SELECT role_name FROM roles; """
+
     insert_role_data = """
         INSERT INTO roles (role_name, role_perm_matrices) VALUES ('Admin', Null);
         INSERT INTO roles (role_name, role_perm_matrices) VALUES ('User', Null);
     """
+
+
+    select_ratings = """ SELECT rating_name, rating_definition FROM giphy_rating; """
 
     insert_giphy_ratings = """
         INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('y', "Youth approved");
@@ -57,10 +62,20 @@ class sqlite:
         INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('r', "Restricted");
     """
 
-    # User operations
-    get_users = """ SELECT u.username, u.email, u.status, r.role_name FROM users u INNER JOIN roles r ON u.role_id = r.id; """
 
-    get_user = """ SELECT u.username, u.email, u.status, r.role_name FROM users u INNER JOIN roles r ON u.role_id = r.id WHERE u.username = ?; """
+    # User operations
+    get_users = """ SELECT u.username, u.email, u.status, r.role_name
+                    FROM users u
+                    INNER JOIN roles r
+                    ON u.role_id = r.id; """
+
+    get_user = """ SELECT u.id, u.username, u.email, u.status, r.role_name
+                   FROM users u
+                   INNER JOIN roles r
+                   ON u.role_id = r.id
+                   WHERE u.username = ?; """
+
+    user_validate = """ SELECT password FROM users WHERE username = ? and password = ?;"""
 
     insert_user = """ INSERT INTO users (username, email, password, status, role_id) VALUES (?, ?, ?, ?, ?); """
 
@@ -71,6 +86,39 @@ class sqlite:
     delete_user = """ DELETE FROM users WHERE username = ?; """
 
     select_roles = """ SELECT role_name FROM roles; """
+
+    insert_giphy_avatar = """ INSERT INTO avatars (person_id, giphy_id, tag_id) VALUES (?, ?, ?); """
+
+    select_user_giphys = """ SELECT u.username, a.giphy_id, a.tag_id
+                             FROM avatars a
+                             INNER JOIN users u
+                             ON a.person_id = u.id
+                             WHERE u.username = ?; """
+
+    select_user_giphy = """ SELECT u.username, a.giphy_id, a.tag_id
+                            FROM avatars a
+                            INNER JOIN users u
+                            ON a.person_id = u.id
+                            WHERE u.username = ?
+                            AND a.giphy_id = ?; """
+
+    create_tag = """ INSERT INTO tags (tag_name, person_id) VALUES (?, ?);"""
+
+    add_tag_to_image = """ UPDATE avatars SET tag_id = ? WHERE giphy_id = ? AND person_id = ?;"""
+
+    select_tags = """ SELECT t.id, t.tag_name
+                      FROM tags t
+                      INNER JOIN users u
+                      ON t.person_id = u.id
+                      WHERE u.person_id = ?;"""
+
+    select_tag = """ SELECT t.id, t.tag_name
+                     FROM tags t
+                     INNER JOIN users u
+                     ON t.person_id = u.id
+                     WHERE u.username = ?
+                     AND t.tag_name = ?;"""
+
 
 class mysql:
     create_table_avatars = """
