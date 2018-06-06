@@ -14,12 +14,17 @@
 
     <!-- Custom styles for this template -->
     <link href="{{url_for('static', filename='css/dashboard.css')}}" rel="stylesheet">
+    <style>
+      .grid-item { width: 20%; }
+      .grid-item img {width: 100%}
+
+    </style>
   </head>
 
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Project Giphy</a>
-      <input class="form-control form-control-dark w-100" type="text" placeholder="Search Giphy" aria-label="Search">
+      <input id="search" class="form-control form-control-dark w-100" type="text" placeholder="Search Giphy" aria-label="Search">
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
           <a class="nav-link" href="{{url_for('logout')}}">
@@ -67,82 +72,25 @@
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Dashboard</h1>
           </div>
-            <div class="container">
-              <div class="row">
-              <div class="gallery col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                  <h1 class="gallery-title">Gallery</h1>
-              </div>
-      
-              <div align="center">
-                  <button class="btn btn-default filter-button" data-filter="all">All</button>
-                  <button class="btn btn-default filter-button" data-filter="hdpe">HDPE Pipes</button>
-                  <button class="btn btn-default filter-button" data-filter="sprinkle">Sprinkle Pipes</button>
-                  <button class="btn btn-default filter-button" data-filter="spray">Spray Nozzle</button>
-                  <button class="btn btn-default filter-button" data-filter="irrigation">Irrigation Pipes</button>
-              </div>
-              <br/>
-      
-      
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-      
-                  <div class="gallery_product col-lg-2 col-md-2 col-sm-2 col-xs-4 filter hdpe">
-                      <img src="http://fakeimg.pl/365x365/" class="img-responsive">
-                  </div>
-              </div>
-        </main>
+          <div class="container-fluid">
+              <!-- add extra container element for Masonry -->
+              <div class="grid" id="grid">
+                  <div class="grid-item"></div>
+                </div>
+
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
     <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/masonry.pkgd.min.js')}}"></script>
+
 
     <!-- Icons -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
@@ -153,7 +101,58 @@
     <!-- Graphs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
     <script>
-        //javascript here
+
+        var $grid = $('.grid').masonry({
+          itemSelector: '.grid-item',
+          percentPosition: true
+        });
+
+        function search_giphy(search_string){
+          var newURL = window.location.protocol + "//" + window.location.host + "/api/v1/giphy/search/" + search_string;
+          console.log('url: ' + newURL);
+          jQuery.ajax({
+              dataType: "json",
+              url: newURL,
+              data: "",
+              success: function(data){
+                console.log(data);
+                var output = JSON.parse(JSON.stringify(data));
+                $grid.masonry('remove', $grid.find('.grid-item'));
+                $.each(output, function(key, val){
+                  var $giphy_id = key;
+                  if (typeof val === 'object'){
+                    $.each(JSON.parse(JSON.stringify(val)), function(k, v){
+                      if (k === 'preview'){
+                        var imgsrc = '<img src="' + v + '">';
+                        var newimage = '<div class="grid-item">' + imgsrc + '</div>';
+                        $grid.append( newimage ).masonry('appended', newimage);
+                        console.log('imgsrc = ' + imgsrc);
+                      }
+                    });
+                  }
+                })
+                $grid.masonry('reloadItems')
+                $grid.masonry('layout')
+                return false;}
+              })
+              };
+
+        $("#search").keypress(function(e){
+          if (e.which == 13){
+            var textbox = $(this).val();
+            console.log("Textbox: " + textbox);
+            search_giphy(textbox);
+            return false;
+          }
+        });
+
+        $grid.on( 'click', '.grid-item', function() {
+          $(this).toggleClass('gigante');
+          // trigger layout after item size changes
+          $grid.masonry('layout');
+        });
+
+
     </script>
   </body>
 </html>
