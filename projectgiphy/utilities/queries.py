@@ -3,7 +3,9 @@ class sqlite:
         CREATE TABLE IF NOT EXISTS "avatars" (
             "id" INTEGER CONSTRAINT "pk_avatars" PRIMARY KEY AUTOINCREMENT,
             "person_id" INTEGER,
-            "giphy_id" TEXT NOT NULL,
+            "giphy_id" TEXT,
+            "giphy_url" TEXT,
+            "giphy_preview" TEXT,
             "tag_id" INTEGER
         );
         """
@@ -55,16 +57,16 @@ class sqlite:
     select_ratings = """ SELECT rating_name, rating_definition FROM giphy_rating; """
 
     insert_giphy_ratings = """
-        INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('y', "Youth approved");
-        INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('g', "General Audience");
-        INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('pg', "Parental Guidance Suggested");
-        INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('pg-13', "Parents Strongly Cautioned");
-        INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('r', "Restricted");
+        INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('Y', "Youth approved");
+        INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('G', "General Audience");
+        INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('PG', "Parental Guidance Suggested");
+        INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('PG-13', "Parents Strongly Cautioned");
+        INSERT INTO giphy_rating (rating_name, rating_definition) VALUES ('R', "Restricted");
     """
 
 
     # User operations
-    get_users = """ SELECT u.username, u.email, u.status, r.role_name
+    get_users = """ SELECT u.id, u.username, u.email, u.status, r.role_name
                     FROM users u
                     INNER JOIN roles r
                     ON u.role_id = r.id; """
@@ -77,7 +79,9 @@ class sqlite:
 
     user_validate = """ SELECT password FROM users WHERE username = ? and password = ?;"""
 
-    insert_user = """ INSERT INTO users (username, email, password, status, role_id) VALUES (?, ?, ?, ?, ?); """
+    insert_user = """ INSERT INTO users
+                      (username, email, password, status, role_id, avatar_default_id)
+                      VALUES (?, ?, ?, ?, ?, ?); """
 
     update_user_password = """ UPDATE users SET password = ? WHERE username = ?; """
 
@@ -87,15 +91,17 @@ class sqlite:
 
     select_roles = """ SELECT role_name FROM roles; """
 
-    insert_giphy_avatar = """ INSERT INTO avatars (person_id, giphy_id, tag_id) VALUES (?, ?, ?); """
+    insert_giphy_avatar = """ INSERT INTO avatars
+                              (person_id, giphy_id, giphy_url, giphy_preview, tag_id)
+                              VALUES (?, ?, ?, ?, ?); """
 
-    select_user_giphys = """ SELECT u.username, a.giphy_id, a.tag_id
+    select_user_giphys = """ SELECT u.username, a.giphy_id, a.giphy_url, a.giphy_preview, a.tag_id
                              FROM avatars a
                              INNER JOIN users u
                              ON a.person_id = u.id
                              WHERE u.username = ?; """
 
-    select_user_giphy = """ SELECT u.username, a.giphy_id, a.tag_id
+    select_user_giphy = """ SELECT u.username, a.giphy_id, a.giphy_url, a.giphy_preview, a.tag_id
                             FROM avatars a
                             INNER JOIN users u
                             ON a.person_id = u.id

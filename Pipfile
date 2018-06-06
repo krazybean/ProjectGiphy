@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 flask = "*"
 pyjwt = "*"
+flask-login = "*"
+chardet = "*"
+"chardet2" = "*"
+oauthlib = "*"
 
 [dev-packages]
 

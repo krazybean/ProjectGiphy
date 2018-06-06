@@ -37,15 +37,6 @@ class Users(object):
         sdb = SQLiteDB()
         self.conn = sdb.connect(app)
 
-    def get_users(self):
-        try:
-            r = self.conn.execute(sqlite.get_users)
-            result = r.fetchall()
-        except Exception:
-            errmsg = "Error getting a list of users"
-            app.logger.exception(GetUserListError(errmsg, ""))
-        return None
-
     def get_user(self, username):
         r = self.conn.execute(sqlite.get_user, [username])
         result = r.fetchone()
@@ -54,9 +45,9 @@ class Users(object):
         return None
 
     def add(self):
-        for attr in [self.username, self.password, self.email]:
+        for attr in [self.username, self.password, self.email, self.avatar]:
             if not attr:
-                raise MissingPersonAttributeError(f"Missing {attr}")
+                raise MissingPersonAttributeError(f"Missing {attr}", "")
         password = encrypt('password', self.password)
         if self.get_user(self.username):
             app.logger.error(DuplicateUserError(f"User {self.username} already exists.", 'ERROR'))
@@ -65,7 +56,9 @@ class Users(object):
             self.conn.execute(sqlite.insert_user, [self.username,
                                                    self.email,
                                                    password,
-                                                   'active', 2])
+                                                   'active',
+                                                   2,
+                                                   self.avatar])
             self.conn.commit()
             app.logger.info(f"User {self.username} added")
             return "User added"
@@ -141,7 +134,7 @@ class Users(object):
             app.logger.exception(TagCreationError(errmsg, ""))
 
 
-    def save_giphy(self, giphy_id, tag_id=None):
+    def save_giphy(self, giphy_id, giphy_url=None, giphy_preview=None, tag_id=None):
         user_details = self.get_user(self.username)
         if not user_details:
             errormsg = UserNotFoundError(f"No user found with username {self.username}", "")
@@ -152,7 +145,7 @@ class Users(object):
             errmsg = f"image {giphy_id} already exists for {self.username}"
             app.logger.error(DuplicateImageError(errmsg, ""))
             return errmsg
-        self.conn.execute(sqlite.insert_giphy_avatar, [user_id, giphy_id, tag_id])
+        self.conn.execute(sqlite.insert_giphy_avatar, [user_id, giphy_id, giphy_url, giphy_preview, tag_id])
         self.conn.commit()
         resp_msg = f"User image id {giphy_id} for {self.username} has been added"
         app.logger.info(resp_msg)
@@ -192,6 +185,17 @@ class Aux(object):
             app.logger.exception("Failed to pull roles")
         return None
 
+    def get_users(self):
+        try:
+            r = self.conn.execute(sqlite.get_users)
+            result = r.fetchall()
+            return result
+        except Exception:
+            errmsg = "Error getting a list of users"
+            app.logger.exception(GetUserListError(errmsg, ""))
+        return None
+
+
 
 
 
@@ -216,13 +220,11 @@ if __name__ == '__main__':
             conn.execute(rating) 
     conn.commit()
     conn.close()
-    # TODO Add setup stuffs
 
-    # from flask import Flask
-    # app = Flask(__name__)
-    user = Users(username='testuser', email='test@test.com', password='test')
+    # Testing bed
+    user = Users(username='testuser', email='test@test.com', password='test', avatar='test')
     user.add()
-    user.save_giphy('12884939')
+    user.save_giphy('12884939', 'http://testurl', 'http://previewurl')
     user.add_tag('test', '12884939')
     user.add_tag('testing')
     print(user.validate('test1'))
