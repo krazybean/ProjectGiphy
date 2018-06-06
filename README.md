@@ -21,19 +21,36 @@ Project for testing some functionality
  - Thorough README explaining INSTALL
 
 ## OWASP Top 9
-- [ ] Input validation
-- [ ] Source code design
-- [ ] Information leakage and improper error handling
+- [x] Input validation
+- [x] Source code design
+- [x] Information leakage and improper error handling
 - [ ] Direct object reference
-- [ ] Resource usage
-- [ ] API usage
-- [ ] Best practices violation
-- [ ] Weak Session Management
+- [x] Resource usage
+- [x] API usage
+- [x] Best practices violation
+- [x] Weak Session Management
 - [ ] Using HTTP GET query strings
 
 ## Installation
 
- _Coming Soon_
+ ```shell
+$ git clone https://github.com/krazybean/ProjectGiphy.git
+$ cd ProjectGiphy/
+$ pipenv install
+$ pipenv shell
+$ source env.sh
+$ flask run
+ ```
+ **-or-**
+
+ ```shell
+$ git clone https://github.com/krazybean/ProjectGiphy.git
+$ cd ProjectGiphy/
+$ python3 -m venv venv/
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+$ flask run
+ ```
 
 ## Design:
 
