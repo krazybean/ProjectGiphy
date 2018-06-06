@@ -2,9 +2,10 @@ import requests
 from projectgiphy import app
 from projectgiphy.utilities.db import Aux
 
-# https://api.giphy.com/v1/gifs/search?api_key=a9WNOfiaVpP7SJjd6xEUthebB45jL28i&q=bear&limit=25&offset=0&rating=G&lang=en
-
 class SearchObj(object):
+    """
+    Search structure and data assignment of a single returned object
+    """
     def __init__(self,
                  id=None,
                  name=None,
@@ -17,6 +18,13 @@ class SearchObj(object):
         self.name = name
 
     def parse(self, data_payload):
+        """ Parses and assigns specified nested elements
+
+        Arg:
+            data_payload (object): Request payload json response
+        Response:
+            object: Search Object for each returned image
+        """
         self.id = data_payload.get('id')
         self.name = data_payload.get('title')
         images = data_payload.get('images')
@@ -28,6 +36,7 @@ class SearchObj(object):
 
 
 class Giphy(object):
+    """ Base searching class for the Giphy API """
 
     LIMIT = 25
     LANG = 'en'
@@ -42,6 +51,14 @@ class Giphy(object):
 
 
     def search(self, search_string, offset=0):
+        """ Search method to query the API
+
+        Args:
+            search_string (str): String to be searched against the API
+            offset (int:optional): Offset to extend searches
+        Returns:
+            dict: Dictonary response containing search objects
+        """
         urlparts = [f"{self.search_url}?api_key={self.api_key}",
                     f"q={search_string}",
                     f"limit={self.LIMIT}",

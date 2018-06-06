@@ -1,4 +1,6 @@
 class sqlite:
+    """ SQLITE based queries """
+
     create_table_avatars = """
         CREATE TABLE IF NOT EXISTS "avatars" (
             "id" INTEGER CONSTRAINT "pk_avatars" PRIMARY KEY AUTOINCREMENT,
@@ -127,6 +129,8 @@ class sqlite:
 
 
 class mysql:
+    """ MySQLdb Based queries """
+
     create_table_avatars = """
         CREATE TABLE IF NOT EXISTS `avatars` (
             `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -174,6 +178,8 @@ class mysql:
 
 
 class postgres():
+    """ Postgres (psycopg2) based queries """
+
     create_table_avatars = """
         CREATE TABLE IF NOT EXISTS "avatars" (
             "id" SERIAL CONSTRAINT "pk_avatars" PRIMARY KEY,

@@ -15,8 +15,8 @@
     <!-- Custom styles for this template -->
     <link href="{{url_for('static', filename='css/dashboard.css')}}" rel="stylesheet">
     <style>
-      .grid-item { width: 20%; }
-      .grid-item img {width: 100%}
+      .grid-item img { width: 200px; }
+      .grid-item--width2 img { width: 400px; }
 
     </style>
   </head>
@@ -76,6 +76,8 @@
               <!-- add extra container element for Masonry -->
               <div class="grid" id="grid">
                   <div class="grid-item"></div>
+                  <div class="grid-item grid-item--width2"></div>
+                  <div class="grid-item"></div>
                 </div>
 
             </div>
@@ -98,12 +100,13 @@
       feather.replace()
     </script>
 
-    <!-- Graphs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
     <script>
 
         var $grid = $('.grid').masonry({
           itemSelector: '.grid-item',
+          columnWidth: 200,
           percentPosition: true
         });
 
@@ -115,9 +118,8 @@
               url: newURL,
               data: "",
               success: function(data){
-                console.log(data);
-                var output = JSON.parse(JSON.stringify(data));
-                $grid.masonry('remove', $grid.find('.grid-item'));
+                var output = JSON.parse(JSON.stringify(data))
+                $grid.masonry('remove', $grid.find('.grid-item')).masonry('layout');
                 $.each(output, function(key, val){
                   var $giphy_id = key;
                   if (typeof val === 'object'){
@@ -125,34 +127,26 @@
                       if (k === 'preview'){
                         var imgsrc = '<img src="' + v + '">';
                         var newimage = '<div class="grid-item">' + imgsrc + '</div>';
-                        $grid.append( newimage ).masonry('appended', newimage);
-                        console.log('imgsrc = ' + imgsrc);
+                        $grid.append( newimage ).masonry('appended', newimage)
                       }
                     });
                   }
-                })
-                $grid.masonry('reloadItems')
-                $grid.masonry('layout')
+                });
                 return false;}
               })
+              $grid.masonry('reloadItems').masonry('layout')
               };
 
         $("#search").keypress(function(e){
           if (e.which == 13){
-            var textbox = $(this).val();
-            console.log("Textbox: " + textbox);
+            var textbox = $(this).val()
             search_giphy(textbox);
+            $grid.imagesLoaded(function (){
+              $grid.masonry('reloadItems');
+            })
             return false;
           }
-        });
-
-        $grid.on( 'click', '.grid-item', function() {
-          $(this).toggleClass('gigante');
-          // trigger layout after item size changes
-          $grid.masonry('layout');
-        });
-
-
+        })
     </script>
   </body>
 </html>
