@@ -10,7 +10,7 @@ Flask-Login==0.4.1
 Flask-OAuthlib==0.9.5
 idna==2.6
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 MarkupSafe==1.0
 oauthlib==2.1.0
 pony==0.7.3
