@@ -15,7 +15,7 @@ MarkupSafe==1.0
 oauthlib==2.1.0
 pony==0.7.3
 pycparser==2.18
-PyJWT==1.6.4
+PyJWT==2.4.0
 requests==2.20.0
 requests-oauthlib==1.0.0
 six==1.11.0
